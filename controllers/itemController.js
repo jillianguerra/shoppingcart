@@ -6,7 +6,7 @@ exports.createItem = async (req, res) => {
     try {
         const item = new Item(req.body)
         await item.save()
-        res.json(item)
+        res.json({item: item})
     } catch (error) {
         res.status(400).json({ message: error.message })
     }
@@ -27,7 +27,7 @@ exports.updateItem = async (req, res) => {
         const item = await Item.findOne({ _id: req.params.id })
         updates.forEach(update => item[update] = req.body[update])
         await item.save()
-        res.json(item)
+        res.json({item: item})
     } catch (error) {
         res.status(400).json({message: error.message})
     }
