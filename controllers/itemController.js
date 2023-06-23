@@ -21,7 +21,7 @@ exports.showItem = async (req,res) => {
     }
 }
 // router.put('/:id',itemController.updateItem)
-exports.updateitem = async (req, res) => {
+exports.updateItem = async (req, res) => {
     try {
         const updates = Object.keys(req.body)
         const item = await Item.findOne({ _id: req.params.id })

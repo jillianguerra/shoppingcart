@@ -7,3 +7,5 @@ router.get('/:id', itemController.showItem)
 router.put('/:id',itemController.updateItem)
 router.delete('/:id', itemController.deleteItem)
 router.get('/', itemController.showIndex)
+
+module.exports = router

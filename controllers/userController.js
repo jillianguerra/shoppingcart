@@ -42,7 +42,7 @@ exports.loginUser = async (req, res) => {
         res.status(400).json({message: error.message})
     }
 }
-exports.logoutUSer = async (req, res) => {
+exports.logoutUser = async (req, res) => {
     try {
         req.user.loggedIn = false
         await req.user.save()

@@ -2,7 +2,7 @@
   "name": "shopping_cart",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "server.js",
   "directories": {
     "test": "tests"
   },
