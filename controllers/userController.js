@@ -17,7 +17,7 @@ exports.auth = async (req, res, next) => {
     }
 }
 exports.createUser = async (req, res) => {
-    req.body.loggedIn = false
+    req.body.loggedIn = true
     try {
         const user = new User(req.body)
         await user.save()

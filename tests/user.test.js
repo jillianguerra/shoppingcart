@@ -25,7 +25,7 @@ describe('Test the user endpoints', () => {
     expect(response.statusCode).toBe(200)
     expect(response.body.user.name).toEqual('Gandolf the Grey')
     expect(response.body.user.email).toEqual('greywizard@email.com')
-    expect(response.body.user.loggedIn).toEqual(false)
+    expect(response.body.user.loggedIn).toEqual(true)
     expect(response.body).toHaveProperty('token')
     })
     test('It should log in a user', async () => {
@@ -33,7 +33,7 @@ describe('Test the user endpoints', () => {
         await user.save()
         const response = await request(app)
             .post('/users/login')
-            .send({ email: 'greywizard@email.com', password: 'ilovehobbits' })
+            .send({ email: 'greywizard@email.com', password: 'ilovehobbits', loggedIn: false })
         expect(response.statusCode).toBe(200)
         expect(response.body.user.name).toEqual('Gandolf the Grey')
         expect(response.body.user.email).toEqual('greywizard@email.com')

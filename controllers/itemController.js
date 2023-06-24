@@ -1,4 +1,6 @@
 const Item = require('../models/item')
+const User = require('../models/user')
+const Cart = require('../models/cart')
 
 // router.post('/new', itemController.createItem)
 exports.createItem = async (req, res) => {
@@ -48,5 +50,20 @@ exports.showIndex = async (req, res) => {
         res.json({items: foundItems})
     } catch (error) {
         res.status(400).send({ message: `Nothin here` })
+    }
+}
+
+exports.addItemToCart = async(req, res) => {
+    try {
+        const user = req.user._id
+        const cart = await Cart.findOne({ _id: user.cart })
+        const item = await Item.findOne({ _id: req.params.id })
+        req.cart.items ?
+        req.cart.items.addToSet({ _id: item._id }):
+        req.cart.items = [{_id: item._id }]
+        await req.cart.save()
+        res.json(cart)
+    } catch (error) {
+        res.status(400).json({ message: error.message })
     }
 }
