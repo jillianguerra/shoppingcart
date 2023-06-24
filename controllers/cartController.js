@@ -22,6 +22,17 @@ exports.showCart = async (req, res) => {
         res.status(400).json({message: error.message})
     }
 }
+exports.getCartSum = async (req, res) => {
+    try {
+        const cart = await Cart.findOne({ _id: req.params.id })
+        cart.items.forEach((item) => {
+            cart.total += item.price
+        })
+        res.json(cart.total)
+    } catch (error) {
+        res.status(400).json({message: error.message})
+    }
+}
 // router.put('/:id', userController.auth, cartController.updateCart)
 exports.updateCart = async (req, res) => {
     try {
