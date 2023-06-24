@@ -1,4 +1,3 @@
-const { userInfo } = require('os')
 const Item = require('../models/item')
 
 // router.post('/new', itemController.createItem)
