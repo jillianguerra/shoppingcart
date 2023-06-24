@@ -6,7 +6,7 @@ exports.createItem = async (req, res) => {
     try {
         const item = new Item(req.body)
         await item.save()
-        res.json({item: item})
+        res.json(item)
     } catch (error) {
         res.status(400).json({ message: error.message })
     }
@@ -14,8 +14,8 @@ exports.createItem = async (req, res) => {
 // router.get('/:id', itemController.showItem)
 exports.showItem = async (req,res) => {
     try {
-        const item = await Item.findOne({ _id: req.params._id })
-        res.json(item)
+        const foundItem = await Item.findOne({ _id: req.params.id })
+        res.json(foundItem)
     } catch (error) {
         res.status(400).json({ message: error.message })
     }
@@ -27,7 +27,7 @@ exports.updateItem = async (req, res) => {
         const item = await Item.findOne({ _id: req.params.id })
         updates.forEach(update => item[update] = req.body[update])
         await item.save()
-        res.json({item: item})
+        res.json(item)
     } catch (error) {
         res.status(400).json({message: error.message})
     }
@@ -36,7 +36,7 @@ exports.updateItem = async (req, res) => {
 exports.deleteItem = async (req, res) => {
     try {
         const item = await Item.findOne({ _id: req.params.id })
-        await req.item.deleteOne()
+        await item.deleteOne()
         res.json({ message: `It's gone`})
     } catch (error) {
         res.status(400).json({ message: error.message })
@@ -45,9 +45,9 @@ exports.deleteItem = async (req, res) => {
 // router.get('/', itemController.showIndex)
 exports.showIndex = async (req, res) => {
     try {
-        const foundItems = await userInfo.find({})
-        res.json(foundItems)
+        const foundItems = await Item.find({})
+        res.json({items: foundItems})
     } catch (error) {
-        res.status(400).send({ message: error.message })
+        res.status(400).send({ message: `Nothin here` })
     }
 }

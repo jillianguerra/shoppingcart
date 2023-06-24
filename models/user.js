@@ -7,8 +7,7 @@ const userSchema = new mongoose.Schema({
     name: {type: String, required: true},
     email: {type: String, required: true},
     password: {type: String, required: true},
-    loggedIn: Boolean,
-    cart: {type: Array, default: []}
+    loggedIn: Boolean
 })
 
 userSchema.pre('save', async function(next) {

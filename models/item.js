@@ -5,7 +5,6 @@ const itemSchema = new mongoose.Schema({
     description: String,
     price: {type: Number, required: true},
     quantity: {type: Number, default: 1},
-    user_id: Number
 })
 
 const Item = mongoose.model('Item', itemSchema)
