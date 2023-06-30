@@ -5,7 +5,6 @@ const itemSchema = new mongoose.Schema({
     description: String,
     category: {type: String, required: true},
     price: {type: Number, required: true},
-    quantity: {type: Number, default: 1},
 })
 
 const Item = mongoose.model('Item', itemSchema)

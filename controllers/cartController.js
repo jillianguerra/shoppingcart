@@ -2,14 +2,17 @@ const User = require('../models/user')
 const Item = require('../models/item')
 const Cart = require('../models/cart')
 
+
 // router.post('/new', cartController.createCart)
 exports.createCart = async(req, res) => {
     try {
         req.body.user = req.user._id
+        const user = req.user
+        const token = req.token
         const cart = await Cart.create(req.body)
         req.user.cart = {_id: cart._id}
         await req.user.save()
-        res.json(cart)
+        res.json({ user, token, cart})
     } catch (error) {
         res.status(400).json({ message: error.message })
     }
@@ -17,20 +20,7 @@ exports.createCart = async(req, res) => {
 // router.get('/:id', cartController.showCart)
 exports.showCart = async(req, res) => {
     try {
-        const cart = await Cart.findOne({ _id: req.params.id })
-        res.json(cart)
-    } catch (error) {
-        res.status(400).json({message: error.message})
-    }
-}
-exports.getCartSum = async(req, res) => {
-    try {
-        const cart = await Cart.findOne({ _id: req.params.id })
-        cart.items.forEach((item) => {
-            cart.total += item.price
-        })
-        await cart.save()
-        console.log(cart)
+        const cart = await Cart.findOne({ _id: req.user.cart })
         res.json(cart)
     } catch (error) {
         res.status(400).json({message: error.message})
@@ -48,8 +38,8 @@ exports.updateCart = async(req, res) => {
 // router.delete('/:id', userController.auth, cartController.deleteCart)
 exports.deleteCart = async(req, res) => {
     try {
-        const cart = await Cart.findOneAndDelete({ _id: req.params.id })
-        res.sendStatus(204)
+        const cart = await Cart.findOneAndDelete({ _id: req.userId })
+        res.json({ message: `Bye Felicia!`})
     } catch (error) {
         res.status(400).json({message: error.message})
     }

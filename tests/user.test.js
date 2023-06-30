@@ -18,7 +18,7 @@ afterAll(async () => {
 })
 
 describe('Test the user endpoints', () => {
-    test('It should create a new user', async () => {
+    test('It should create a new user and cart', async () => {
         const response = await request(app)
         .post('/users/new')
         .send({ name: 'Frodo Baggins', email: 'thebagginsboy@email.com', password: 'ilovesam' })
@@ -27,6 +27,7 @@ describe('Test the user endpoints', () => {
     expect(response.body.user.email).toEqual('thebagginsboy@email.com')
     expect(response.body.user.loggedIn).toEqual(true)
     expect(response.body).toHaveProperty('token')
+    expect(response.body).toHaveProperty('cart')
     })
     test('It should log in a user', async () => {
         const user = new User({ name: 'Legolas', email: 'thenewgoldilocks@email.com', password: 'orlandobloom', loggedIn: false })
@@ -63,7 +64,7 @@ describe('Test the user endpoints', () => {
         expect(response.body.name).toEqual('Samwise Gamgee')
         expect(response.body.loggedIn).toEqual(false)
     })
-    test('It should delete auser', async() => {
+    test('It should delete the user and cart', async() => {
         const user = new User({name: 'Saruman', email: 'evilwizard@email.com', password: 'ihatehobbits' })
         await user.save()
         const token = await user.generateAuthToken()

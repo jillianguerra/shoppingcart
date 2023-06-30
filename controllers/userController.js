@@ -16,13 +16,16 @@ exports.auth = async (req, res, next) => {
         res.status(401).send(`We don't know her`)
     }
 }
-exports.createUser = async (req, res) => {
+exports.createUser = async (req, res, next) => {
     req.body.loggedIn = true
     try {
         const user = new User(req.body)
         await user.save()
         const token = await user.generateAuthToken()
-        res.json({ user, token})
+       // res.json({ user, token})
+       req.user = user
+       req.token = token
+        next()
     } catch (error) {
         res.status(400).json({message: error.message})
     }
@@ -62,10 +65,12 @@ exports.updateUser = async (req, res) => {
         res.status(400).json({message: error.message})
     }
 }
-exports.deleteUser = async (req, res) => {
+exports.deleteUser = async (req, res, next) => {
     try {
+        const userId = req.user._id
         await req.user.deleteOne()
-        res.json({ message: `Bye Felicia!`})
+        req.userId = userId
+        next()
     } catch (error) {
         res.status(400).json({message: error.message})
     }

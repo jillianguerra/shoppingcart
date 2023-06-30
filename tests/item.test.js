@@ -4,6 +4,8 @@ const { MongoMemoryServer } = require('mongodb-memory-server')
 const app = require('../app')
 const server = app.listen(8080, () => console.log(`Port 8080 is lit`))
 const Item = require('../models/item')
+const User = require('../models/user')
+const Cart = require('../models/cart')
 let mongoServer
 
 beforeAll(async () => {
