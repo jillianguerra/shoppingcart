@@ -21,35 +21,34 @@ exports.createCart = async(req, res) => {
 // router.get('/:id', cartController.showCart)
 exports.showCart = async(req, res) => {
     try {
-        const cart = await Cart.findOne({ _id: req.user.cart })
-        res.json(cart)
-    } catch (error) {
-        res.status(400).json({message: error.message})
-    }
-}
-// router.put('/:id', userController.auth, cartController.updateCart)
-exports.updateCart = async(req, res) => {
-    try {
-        // const updates = Object.keys(req.body)
-        // const item = await Item.findOne({ _id: req.params.id })
-        // updates.forEach(update => item[update] = req.body[update])
-        // await item.save()
-        // res.json(item)
-
-        // const cart = await Cart.findOneAndUpdate({ _id: req.params.id })
         const cart = await Cart.findOne({ _id: req.params.id }).populate('items')
-        const updates = Object.keys(req.body)
-        updates.forEach(update => cart.items[update] = req.body[update])
-        await cart.save()
         res.json(cart)
     } catch (error) {
         res.status(400).json({message: error.message})
     }
 }
-// router.delete('/:id', userController.auth, cartController.deleteCart)
+// router.put('/:id', userController.auth, cartController.updateItemInCart)
+exports.updateItemInCart = async(req, res) => {
+    try {
+        const newQty = req.body.quantity
+        const cart = await Cart.findOne({ _id: req.params.id }).populate('items')
+        const item = await Item.findOne({ _id: req.body.item })
+        const itemList = cart.items.find(itemList => itemList.item.equals(item._id))
+        if (newQty <= 0) {
+            await ItemList.findOneAndDelete({ _id: itemList._id })
+            await cart.save()
+        } else {
+            itemList.quantity = newQty
+            await itemList.save()
+        }
+        res.json(cart)
+    } catch (error) {
+        res.status(400).json({ message: error.message })
+    }
+}
 exports.deleteCart = async(req, res) => {
     try {
-        const cart = await Cart.findOneAndDelete({ _id: req.userId })
+        const cart = await Cart.findOneAndDelete({ _id: req.user.cart })
         res.json({ message: `Bye Felicia!`})
     } catch (error) {
         res.status(400).json({message: error.message})

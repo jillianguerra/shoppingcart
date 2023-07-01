@@ -4,6 +4,5 @@ const cartController = require('../controllers/cartController')
 const userController = require('../controllers/userController')
 
 router.get('/:id', userController.auth, cartController.showCart)
-router.put('/:id', userController.auth, cartController.updateCart)
-
+router.put('/:id', userController.auth, cartController.updateItemInCart)
 module.exports = router

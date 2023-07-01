@@ -7,5 +7,5 @@ mongoose.connect(process.env.MONGO_URI)
 mongoose.connection.once('open', () => console.log(`One does not simply log into Mongo`))
 
 app.listen(PORT, () => {
-    console.log(`Tell me where is ${PORT} for I much desire to speak to it.`)
+    console.log(`They're taking the hobbits to ${PORT}!!`)
 })

@@ -37,8 +37,7 @@ exports.updateItem = async (req, res) => {
 // router.delete('/:id', itemController.deleteItem)
 exports.deleteItem = async (req, res) => {
     try {
-        const item = await Item.findOne({ _id: req.params.id })
-        await item.deleteOne()
+        const item = await Item.findOneAndDelete({ _id: req.params.id })
         res.json({ message: `It's gone`})
     } catch (error) {
         res.status(400).json({ message: error.message })
@@ -53,39 +52,6 @@ exports.showIndex = async (req, res) => {
         res.status(400).send({ message: `Nothin here` })
     }
 }
-
-// exports.addItemToCart = async(req, res) => {
-//     try {
-//         const cart = await Cart.findOne({ _id: req.user.cart })
-//         const item = await Item.findOne({ _id: req.params.id })
-//         cart.items ?
-//         cart.items.addToSet(item):
-//         cart.items = [item]
-//         await cart.save()
-//         res.json(cart)
-//     } catch (error) {
-//         res.status(400).json({ message: error.message })
-//     }
-// // }
-// exports.addItemToCart = async(req, res, next) => {
-//     try {
-//         const cart = await Cart.findOne({ _id: req.user.cart })
-//         const item = await Item.findOne({ _id: req.params.id })
-//         if (!cart.items.length) {
-//             cart.items = [item]
-//         } else if (cart.items.includes(item._id)) {
-//             const index = cart.items.indexOf(item._id)
-//             cart.items[index].quantity ++
-//             item.save()
-//         } else {
-//             cart.items.addToSet(item)
-//         }
-//         await cart.save()
-//         res.json(cart)
-//     } catch (error) {
-//         res.status(400).json({ message: error.message })
-//     }
-// }
 exports.addItemToCart = async(req, res) => {
     try {
         const cart = await Cart.findOne({ _id: req.user.cart }).populate('items')
@@ -97,6 +63,7 @@ exports.addItemToCart = async(req, res) => {
         if (itemList){
             itemList.quantity += 1
             await itemList.save()
+            await cart.save()
         } else {
             const newItemList = new ItemList({item: item._id, cart: cart._id})
             newItemList.quantity += 1

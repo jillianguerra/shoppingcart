@@ -8,13 +8,12 @@ const cartSchema = new Schema({
     isPaid: { type: Boolean, default: false}
 })
 cartSchema.pre('save', async function(next) {
-    if(this.isModified('items')) {
+    await this.populate('items')
         let sum = 0
         this.items.forEach((item) => {
             sum += item.total
         })
         this.total = sum
-    }
     next()
 })
 const Cart = model('Cart', cartSchema)

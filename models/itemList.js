@@ -33,21 +33,28 @@ const itemListSchema = new Schema({
 //     }
 //     return cart.save()
 // }
-itemListSchema.methods.setItemQuantity = async function(itemId, newQty, cartId) {
-    const cart = await Cart.findOne({ _id: cartId })
-    const itemList = cart.items.find(itemList => itemList.item._id.equals(itemId))
-    if (itemList && newQty <= 0) {
-        itemList.remove()
-    } else if (itemList) {
-        itemList.quantity = newQty
-    }
-    return cart.save()
-}
+// itemListSchema.methods.setItemQuantity = async function(newQty) {
+//     console.log('sup')
+//     const cart = await Cart.findOne({ _id: this.cart }).populate('items')
+//     console.log('newQty', newQty)
+//     // console.log('cart', cart)
+//     if (newQty <= 0) {
+//         console.log('deleted')
+//         cart.remove(this)
+//     } else {
+//         this.quantity = newQty
+//         await this.save()
+//     }
+//     return cart.save()
+// }
 itemListSchema.pre('save', async function(next) {
     if(this.isModified('quantity')) {
-        const item = Item.findOne({ _id: this.item })
-        let product = this.quantity * item.price 
+        const cart = await Cart.findOne({ _id: this.cart })
+        const item = await Item.findOne({ _id: this.item })
+        let product = 0
+        product += this.quantity * item.price 
         this.total = product
+        await cart.save()
     }
     next()
 })
