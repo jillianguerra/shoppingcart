@@ -1,26 +1,40 @@
 require('dotenv').config()
 const { model, Schema } = require('mongoose')
-const Item = require('./item.js')
+const Item = require('./item')
+const Cart = require('./cart')
 
 const itemListSchema = new Schema({
-    item: Item,
-    quantity: {type: Number, default: 1},
-    sum: {type: Number, default: 0}
+    item: {type: Schema.Types.ObjectId, required: true, ref: 'Item'},
+    quantity: {type: Number, default: 0},
+    total: {type: Number, default: 0},
+    cart: {type: Schema.Types.ObjectId, required: true, ref: 'Cart'}
 })
 
-itemListSchema.methods.addItemToCart = async function(itemId) {
-    const cart = this
-    const itemList = cart.items.find(itemList => itemList.item._id.equals(itemId))
-    if (itemList){
-        itemList.quantity += 1
-    } else {
-        const item = await mongoose.model('Item').findById(itemId)
-        cart.items.push({ item })
-    }
-    return cart.save()
-}
-itemListSchema.methods.setItemQuantity = function(itemId, newQty) {
-    const cart = this
+//         const cart = await Cart.findOne({ _id: req.user.cart })
+//         const item = await Item.findOne({ _id: req.params.id })
+//         if (!cart.items.length) {
+//             cart.items = [item]
+//         } else if (cart.items.includes(item._id)) {
+//             const index = cart.items.indexOf(item._id)
+//             cart.items[index].quantity ++
+//             item.save()
+//         } else {
+//             cart.items.addToSet(item)
+//         }
+//         await cart.save()
+// itemListSchema.methods.addItem = async function(itemId, cartId) {
+//     const cart = await Cart.findOne({ _id: cartId })
+//     const item = await Item.findOne({ _id: itemId })
+//     const itemList = cart.items.find(itemList => itemList.item._id.equals(itemId))
+//     if (itemList){
+//         itemList.quantity += 1
+//     } else {
+//         cart.items.addToSet(item)
+//     }
+//     return cart.save()
+// }
+itemListSchema.methods.setItemQuantity = async function(itemId, newQty, cartId) {
+    const cart = await Cart.findOne({ _id: cartId })
     const itemList = cart.items.find(itemList => itemList.item._id.equals(itemId))
     if (itemList && newQty <= 0) {
         itemList.remove()
@@ -31,11 +45,22 @@ itemListSchema.methods.setItemQuantity = function(itemId, newQty) {
 }
 itemListSchema.pre('save', async function(next) {
     if(this.isModified('quantity')) {
+        let amount = 0
         const item = Item.findOne({ _id: this.item })
-        let total = this.quantity * item.price 
-        this.sum = total
+        amount += this.quantity * item.price 
+        this.total = amount
     }
     next()
 })
-const ItemList = mongoose.model('ItemList', itemListSchema)
+// cartSchema.pre('save', async function(next) {
+//     if(this.isModified('items')) {
+//         let sum = 0
+//         this.items.forEach((item) => {
+//             sum += item.sum
+//         })
+//         this.total = sum
+//     }
+//     next()
+// })
+const ItemList = model('ItemList', itemListSchema)
 module.exports = ItemList

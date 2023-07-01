@@ -86,13 +86,26 @@ exports.showIndex = async (req, res) => {
 //         res.status(400).json({ message: error.message })
 //     }
 // }
-exports.addItemToCart = async(req, res, next) => {
+exports.addItemToCart = async(req, res) => {
     try {
-        const cart = await Cart.findOne({ _id: req.user.cart })
+        const cart = await Cart.findOne({ _id: req.user.cart }).populate('items')
         const item = await Item.findOne({ _id: req.params.id })
-        const itemList = new ItemList(item)
-        await itemList.save()
-        itemList.addItemToCart(item._id)
+        let itemList
+        if (cart.items) {
+            itemList = cart.items.find(itemList => itemList.item.equals(item._id))
+        }
+        if (itemList){
+            itemList.quantity += 1
+            await itemList.save()
+        } else {
+            const newItemList = new ItemList({item: item._id, cart: cart._id})
+            newItemList.quantity += 1
+            await newItemList.save()
+            cart.items ?
+            cart.items.addToSet(newItemList) :
+            cart.items = [newItemList]
+            await cart.save()
+        }
         res.json(cart)
     } catch (error) {
         res.status(400).json({ message: `Nah that ain't it.`})
