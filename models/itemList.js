@@ -45,22 +45,12 @@ itemListSchema.methods.setItemQuantity = async function(itemId, newQty, cartId) 
 }
 itemListSchema.pre('save', async function(next) {
     if(this.isModified('quantity')) {
-        let amount = 0
         const item = Item.findOne({ _id: this.item })
-        amount += this.quantity * item.price 
-        this.total = amount
+        let product = this.quantity * item.price 
+        this.total = product
     }
     next()
 })
-// cartSchema.pre('save', async function(next) {
-//     if(this.isModified('items')) {
-//         let sum = 0
-//         this.items.forEach((item) => {
-//             sum += item.sum
-//         })
-//         this.total = sum
-//     }
-//     next()
-// })
+
 const ItemList = model('ItemList', itemListSchema)
 module.exports = ItemList

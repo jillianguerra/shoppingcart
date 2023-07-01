@@ -19,7 +19,7 @@ userSchema.pre('save', async function(next) {
     next()
 })
 userSchema.methods.generateAuthToken = async function() {
-    const token = jwt.sign({_id: this._id}, 'bucketbros', {expiresIn: '24h'})
+    const token = jwt.sign({_id: this._id}, process.env.SECRET, {expiresIn: '24h'})
     return token
 }
 const User = mongoose.model('User', userSchema)

@@ -29,7 +29,17 @@ exports.showCart = async(req, res) => {
 // router.put('/:id', userController.auth, cartController.updateCart)
 exports.updateCart = async(req, res) => {
     try {
-        const cart = await Cart.findOneAndUpdate({ _id: req.params.id })
+        // const updates = Object.keys(req.body)
+        // const item = await Item.findOne({ _id: req.params.id })
+        // updates.forEach(update => item[update] = req.body[update])
+        // await item.save()
+        // res.json(item)
+
+        // const cart = await Cart.findOneAndUpdate({ _id: req.params.id })
+        const cart = await Cart.findOne({_id: req.params.id })
+        const updates = Object.keys(req.body)
+        cart.items.forEach()
+        
         res.json(cart)
     } catch (error) {
         res.status(400).json({message: error.message})
