@@ -1,6 +1,7 @@
 const User = require('../models/user')
 const Item = require('../models/item')
 const Cart = require('../models/cart')
+const ItemList = require('../models/itemList')
 
 
 // router.post('/new', cartController.createCart)
@@ -36,10 +37,10 @@ exports.updateCart = async(req, res) => {
         // res.json(item)
 
         // const cart = await Cart.findOneAndUpdate({ _id: req.params.id })
-        const cart = await Cart.findOne({_id: req.params.id })
+        const cart = await Cart.findOne({ _id: req.params.id }).populate('items')
         const updates = Object.keys(req.body)
-        cart.items.forEach()
-        
+        updates.forEach(update => cart.items[update] = req.body[update])
+        await cart.save()
         res.json(cart)
     } catch (error) {
         res.status(400).json({message: error.message})
