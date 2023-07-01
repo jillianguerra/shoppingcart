@@ -40,7 +40,7 @@ describe('Test the cart endpoints', () => {
         const user = new User({ name: 'Gimli son of Gloin', email: 'bestaxwarrior@email.com', password: 'iloveaxes' })
         await user.save()
         const token = await user.generateAuthToken()
-        const item1 = new Item({ name: `Gimli's ax`, description: `It's like an ax but so much fancier!`, category: 'weapons', price: 500 })
+        const item1 = new Item({ name: `Gimli's ax`, description: `Old reliable`, category: 'weapons', price: 500 })
         await item1.save()
         const item2 = new Item({ name: 'dwarf armor', description: 'extra short and extra stout', category: 'armor', price: 500 })
         await item2.save()
