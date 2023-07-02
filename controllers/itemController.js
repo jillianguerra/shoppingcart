@@ -56,24 +56,16 @@ exports.addItemToCart = async(req, res) => {
     try {
         const cart = await Cart.findOne({ _id: req.user.cart })
         const item = await Item.findOne({ _id: req.params.id })
-        let itemList
-        if (cart.items) {
-            await cart.populate('items')
-            itemList = cart.items.find(itemList => itemList.item.equals(item._id))
-        }
-        if (itemList){
-            itemList.quantity += 1
-            await itemList.save()
-            await cart.save()
-        } else {
-            const newItemList = new ItemList({item: item._id, cart: cart._id})
-            newItemList.quantity += 1
-            await newItemList.save()
-            cart.items ?
-            cart.items.addToSet(newItemList) :
-            cart.items = [newItemList]
-            await cart.save()
-        }
+        cart.items ? await cart.populate('items') : cart.items = []
+        let itemList = cart.items.find(itemList => itemList.item.equals(item._id))
+            if (itemList) { 
+                itemList.quantity += 1 
+            } else {
+                itemList = new ItemList({ item: item._id, cart: cart._id, quantity: 1 })
+                cart.items.addToSet(itemList)
+            }
+        await itemList.save()
+        await cart.save()
         res.json(cart)
     } catch (error) {
         res.status(400).json({ message: `Nah that ain't it.`})

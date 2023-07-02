@@ -25,10 +25,12 @@ describe('Test the cart endpoints', () => {
         const user = new User({ name: 'Gollum', email: 'myprecious@email.com', password: 'ilovethatring' })
         await user.save()
         const token = await user.generateAuthToken()
-        const item = new Item({ name: 'tasty fish', description: `It's raw and wiggling`, category: 'seafood', price: 5 })
+        const item = new Item({ name: 'tasty fish', description: `It's raw and wriggling`, category: 'seafood', price: 5 })
         await item.save()
         const cart = new Cart({ user: user._id })
         await cart.save()
+        user.cart = cart._id
+        await user.save()
         const response = await request(app)
             .post(`/items/${item._id}`)
             .set(`Authorization`, `Bearer ${token}`)

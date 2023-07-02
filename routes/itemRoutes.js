@@ -2,7 +2,6 @@ const express = require('express')
 const router = express.Router()
 const itemController = require('../controllers/itemController')
 const userController = require('../controllers/userController')
-const cartController = require('../controllers/cartController')
 
 router.post('/new', itemController.createItem)
 router.get('/', itemController.showIndex)
