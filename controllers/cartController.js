@@ -40,6 +40,7 @@ exports.updateItemInCart = async(req, res) => {
         } else {
             itemList.quantity = newQty
             await itemList.save()
+            await cart.save()
         }
         res.json(cart)
     } catch (error) {
@@ -48,9 +49,19 @@ exports.updateItemInCart = async(req, res) => {
 }
 exports.deleteCart = async(req, res) => {
     try {
-        const cart = await Cart.findOneAndDelete({ _id: req.user.cart })
+        const cart = await Cart.findOneAndDelete({ _id: req.cart })
         res.json({ message: `Bye Felicia!`})
     } catch (error) {
         res.status(400).json({message: error.message})
+    }
+}
+exports.checkOut = async(req, res, next) => {
+    try {
+        const cart = await Cart.findOne({ _id: req.user.cart })
+        cart.isPaid = true
+        await cart.save()
+        next()
+    } catch (error) {
+        res.status(400).json({message: 'nope'})
     }
 }

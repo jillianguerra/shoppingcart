@@ -37,7 +37,7 @@ exports.updateItem = async (req, res) => {
 // router.delete('/:id', itemController.deleteItem)
 exports.deleteItem = async (req, res) => {
     try {
-        const item = await Item.findOneAndDelete({ _id: req.params.id })
+        await Item.findOneAndDelete({ _id: req.params.id })
         res.json({ message: `It's gone`})
     } catch (error) {
         res.status(400).json({ message: error.message })
@@ -54,10 +54,11 @@ exports.showIndex = async (req, res) => {
 }
 exports.addItemToCart = async(req, res) => {
     try {
-        const cart = await Cart.findOne({ _id: req.user.cart }).populate('items')
+        const cart = await Cart.findOne({ _id: req.user.cart })
         const item = await Item.findOne({ _id: req.params.id })
         let itemList
         if (cart.items) {
+            await cart.populate('items')
             itemList = cart.items.find(itemList => itemList.item.equals(item._id))
         }
         if (itemList){

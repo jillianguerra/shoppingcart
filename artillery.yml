@@ -6,8 +6,9 @@ config:
 scenarios:
   - flow:
       - post:
-          url: "/users"
+          url: "/items/new"
           json:
             name: "Test"
-            email: "test@example.com"
-            password: "Password123"
+            description: "test test test"
+            category: "test"
+            price: 10

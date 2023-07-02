@@ -20,7 +20,6 @@ afterAll(async () => {
     server.close()
 })
 
-
 describe('Test the cart endpoints', () => {
     test('It should add an item to the cart', async () => {
         const user = new User({ name: 'Gollum', email: 'myprecious@email.com', password: 'ilovethatring' })
@@ -30,12 +29,11 @@ describe('Test the cart endpoints', () => {
         await item.save()
         const cart = new Cart({ user: user._id })
         await cart.save()
-        console.log(cart)
         const response = await request(app)
             .post(`/items/${item._id}`)
             .set(`Authorization`, `Bearer ${token}`)
-    expect(response.body.total).toEqual(5)
     expect(response.statusCode).toBe(200)
+    expect(response.body.total).toEqual(5)
     })
     test('It should display items in the cart and the total', async () => {
         const user = new User({ name: 'Gimli son of Gloin', email: 'bestaxwarrior@email.com', password: 'iloveaxes' })
@@ -84,7 +82,7 @@ describe('Test the cart endpoints', () => {
         const token = await user.generateAuthToken()
         const cart = new Cart({ user: user._id })
         await cart.save()
-        const item = await new Item({ name: 'crispy bacon', description: 'delicious', category: 'meats', price: 10})
+        const item = await new Item({ name: 'nice and crispy bacon', description: 'nice AND crispy', category: 'meats', price: 10})
         await item.save()
         const itemList = new ItemList({ item: item._id, quantity: 1, cart: cart._id })
         await itemList.save()
