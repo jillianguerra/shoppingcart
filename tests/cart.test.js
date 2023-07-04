@@ -79,12 +79,12 @@ describe('Test the cart endpoints', () => {
         expect(response.body.total).toEqual(300)
     })
     test('It should delete an item from the cart', async () => {
-        const user = new User({name: 'Peregrin Took', email: 'pimpinpippin@email.com', password: 'pintsofaleplease'})
+        const user = new User({ name: 'Peregrin Took', email: 'pimpinpippin@email.com', password: 'pintsofaleplease' })
         await user.save()
         const token = await user.generateAuthToken()
         const cart = new Cart({ user: user._id })
         await cart.save()
-        const item = await new Item({ name: 'nice and crispy bacon', description: 'nice AND crispy', category: 'meats', price: 10})
+        const item = new Item({ name: 'nice and crispy bacon', description: 'nice AND crispy', category: 'meats', price: 10 })
         await item.save()
         const itemList = new ItemList({ item: item._id, quantity: 1, cart: cart._id })
         await itemList.save()
@@ -96,5 +96,22 @@ describe('Test the cart endpoints', () => {
             .send({ item: item._id, quantity: 0 })
         expect(response.statusCode).toBe(200)
         expect(response.body.total).toEqual(0)
+    })
+    test('It should check out the cart and generate a new cart', async() => {
+        const user = new User({ name: 'Aragorn Son of Arathorn', email: 'strider@email.com', password: 'oldbutstillhot' })
+        await user.save()
+        const token = await user.generateAuthToken()
+        const cart = new Cart({ user: user._id })
+        await cart.save()
+        user.cart = cart._id
+        await user.save()
+        const item = new Item({ name: 'Anduril', description: 'the flame of the west', category: 'weapons', price: 1000 })
+        await item.save()
+        const itemList = new ItemList({ item: item._id, quantity: 1, cart: cart._id })
+        await itemList.save()
+        cart.items = ([itemList])
+        await cart.save()
+
+
     })
 })

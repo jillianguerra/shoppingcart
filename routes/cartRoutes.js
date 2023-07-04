@@ -5,5 +5,6 @@ const userController = require('../controllers/userController')
 
 router.get('/:id', userController.auth, cartController.showCart)
 router.put('/:id', userController.auth, cartController.updateItemInCart)
-router.post('/:id', userController.auth, cartController.checkOut, cartController.createCart)
+router.post('/:id', userController.auth, cartController.checkOut)
+router.get('/history', userController.auth, cartController.showHistory)
 module.exports = router

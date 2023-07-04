@@ -52,6 +52,7 @@ exports.showIndex = async (req, res) => {
         res.status(400).send({ message: `Nothin here` })
     }
 }
+// router.get('/:id', userController.auth, itemController.addItemToCart)
 exports.addItemToCart = async(req, res) => {
     try {
         const cart = await Cart.findOne({ _id: req.user.cart })
@@ -71,9 +72,3 @@ exports.addItemToCart = async(req, res) => {
         res.status(400).json({ message: `Nah that ain't it.`})
     }
 }
-
-// populate()
-// const id = 765
-// const arr = [{id: 765}, {id: 765}, {id: 357}]
-// if(
-// arr.filter(item => item.id === id).length > 0){ logic stuff}
