@@ -55,18 +55,18 @@ exports.deleteCart = async(req, res) => {
         res.status(400).json({message: error.message})
     }
 }
-// router.post('/:id', userController.auth, cartController.checkOut)
+// router.put('/checkout', userController.auth, cartController.checkOut)
 exports.checkOut = async(req, res) => {
     try {
-        const user = req.body.user
-        const cart = await Cart.findOne({ _id: req.user.cart })
+        const user = req.user
+        const cart = await Cart.findOne({ _id: user.cart })
         cart.isPaid = true
         await cart.save()
         const newCart = new Cart({ user: user._id })
         await newCart.save()
         user.cart = newCart._id
         await user.save()
-        res.json(cart, { message: 'Thank you for your purchase!' })
+        res.json({cart: cart, message: 'Thank you for your purchase!' })
     } catch (error) {
         res.status(400).json({message: 'nope'})
     }
@@ -74,8 +74,8 @@ exports.checkOut = async(req, res) => {
 // router.get('/history', userController.auth, cartController.showHistory)
 exports.showHistory = async(req, res) => {
     try {
-        const carts = await Cart.find({ isPaid: true, user: req.user._id })
-        res.json(carts)
+        const carts = await Cart.find({ user: req.user._id, isPaid: true }).populate('items')
+        res.json({ carts: carts })
     } catch (error) {
         res.status(400).json({message: error.message})
     }
