@@ -5,6 +5,7 @@ const userController = require('../controllers/userController')
 
 router.post('/new', itemController.createItem)
 router.get('/', itemController.showIndex)
+router.get('/all/:category', itemController.showCategory)
 router.get('/:id', itemController.showItem)
 router.put('/:id',itemController.updateItem)
 router.delete('/:id', itemController.deleteItem)

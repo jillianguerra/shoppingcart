@@ -52,6 +52,15 @@ exports.showIndex = async (req, res) => {
         res.status(400).send({ message: `Nothin here` })
     }
 }
+// router.get('/:category', itemController.showCategory)
+exports.showCategory = async(req, res) => {
+    try {
+        const foundItems = await Item.find({ category: req.params.category })
+        res.json({ items: foundItems })
+    } catch (error) {
+        res.status(400).send({ message: `We don't have those...` })
+    }
+}
 // router.get('/:id', userController.auth, itemController.addItemToCart)
 exports.addItemToCart = async(req, res) => {
     try {
