@@ -167,3 +167,6 @@ If you put down quantity: 0, the item will be deleted from the cart. Otherwise, 
 <img src="https://i.imgur.com/MjdUtlZ.png">
 <p>Item Category Index Page</p>
 <img src="https://i.imgur.com/Eou6mbB.png">
+<h2>Diagram</h2>
+<p>Model Relationship</p>
+<img src="https://i.imgur.com/2p9G3D1.png">
