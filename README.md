@@ -38,6 +38,9 @@ To close the server, go into the terminal and type control-C.
 <li>
 To run the tests, make sure the application is running on localhost:3000, then open another terminal and type "npm run test." This should run tests on all the routes. There are 18 tests in total. All of them should pass.
 </li>
+<li>
+To run the artillery test, type "npm run load." This will make 1200 test items in the data base, and give information about how long the response time is. (How fast the application is). The time will vary depending on how fast the computer running the application is.
+</li>
 <h3>User Routes</h3>
 <ul>
 <li>
@@ -134,3 +137,33 @@ If you put down quantity: 0, the item will be deleted from the cart. Otherwise, 
 </p>
 </ul>
 </ul>
+<h2>Artillery Test Result*</h2>
+<p><small>*Done on a 2018 MacBook Air</small></p>
+<p>Summary report @ 20:40:52(-0400) 2023-07-06
+  <p>Scenarios launched:  1200</p>
+  <p>Scenarios completed: 1200</p>
+  <p>Requests completed:  1200</p>
+  <p>Mean response/sec: 19.84</p>
+  <p>Response time (msec):</p>
+   <p> min: 29</p>
+   <p> max: 924</p>
+   <p> median: 49</p>
+   <p> p95: 234.5</p>
+   <p> p99: 416.5</p>
+  <p>Scenario counts:</p>
+    <p>0: 1200 (100%)</p>
+  <p>Codes:</p>
+   <p> 200: 1200</p>
+<h2>Trello Board</h2>
+<a href="https://trello.com/b/aCdsX1R0/shopping-cart">Trello Time</a>
+<h2>Wire Frames</h2>
+<p>Homepage</p>
+<img src="https://i.imgur.com/KYI2L6n.png">
+<p>Item Page</p>
+<img src="https://i.imgur.com/t4O1JBQ.png">
+<p>Cart Page</p>
+<img src="https://i.imgur.com/VFkuJgW.png">
+<p>User Page</p>
+<img src="https://i.imgur.com/MjdUtlZ.png">
+<p>Item Category Index Page</p>
+<img src="https://imgur.com/a/4IQ1D72">
