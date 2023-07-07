@@ -21,9 +21,7 @@ exports.createCart = async(req, res) => {
 // router.get('/:id', cartController.showCart)
 exports.showCart = async(req, res) => {
     try {
-        console.log('hi')
         const cart = await Cart.findOne({ _id: req.user.cart }).populate('items')
-        console.log(cart)
         res.json(cart)
     } catch (error) {
         res.status(400).json({message: error.message})

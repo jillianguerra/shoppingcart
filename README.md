@@ -60,6 +60,9 @@ A cart is automatically generated when you create a new user. The application ro
 To log in, go to localhost:3000/users/login. Make sure the request is a 'post' request. Send your email and password. The application first encrypts the password you send and then compares that to the encrypted password in the database. If the two match, and the email matches the email in the database, it will generate a new json web token and switch the status of the user to "logged in: true".
 </li>
 <li>
+To user the next few routes, you will need to have a token in Postman under authorization. Go to the authorization tab, set the type to 'bearer token' and copy paste the token you got when you either created the user, or logged in the user. Adding this will make the next few routes possible.
+</li>
+<li>
 To log out, go to localhost:3000/users/logout. Make sure the request is a 'post' request. This will first authenticate the user by comparing the user token, then it will set the user status from "logged in: true" to "logged in: false".
 </li>
 <li>
@@ -86,26 +89,48 @@ Then press 'SEND'. This will create a new item in your Mongo database.
 </p>
 </li>
 <li>
-To see every item in the database, go to localhost:3000/items/
+To see every item in the database, go to localhost:3000/items/. Make sure this is a get request in Postman.
+</li>
+<li>
+To see every item in a particular category in the database, go to localhost:3000/items/all/*NAME OF CATEGORY*. Make sure this is a get request in Postman.
+</li>
+<li>
+To see one particular item, find the item's _id in Mongo. Go to localhost:3000/items/*ID OF THE ITEM* and make sure it's a get request in Postman.
+</li>
+<li>
+Hold on to that item ID because you'll need it for updating an item. Change to a put request. Go to localhost:3000/items/*ID OF THE ITEM* and enter the information the same way you did for creating an item, but with any changes you want to make.
+</li>
+<li>
+To delete an item, grab the item _id from Mongo, and go to localhost:3000/items/*ID OF THE ITEM* and make a delete request. Poof it's gone.
+</li>
+<li>
+To put an item in your cart, get that item ID one more time and go to localhost:3000/items/*ID OF THE ITEM* and make a post request. Make sure you have a token set in your authorization folder. See the user routes instructions above. If you make this request again, it will change the quantity of that item to 2, 3, 4, however many times you make the post request.
 </li>
 </ul>
+<h3>Cart Routes</h3>
+<ul>
 <li>
-router.post('/new', itemController.createItem)
-router.get('/', itemController.showIndex)
-router.get('/all/:category', itemController.showCategory)
-router.get('/:id', itemController.showItem)
-router.put('/:id',itemController.updateItem)
-router.delete('/:id', itemController.deleteItem)
-router.post('/:id', userController.auth, itemController.addItemToCart)
+To make any of the cart routes function in Postman, you will need to have a JSON web token set in the authorization tab with the type "bearer token". See user routes above for a detailed explanation.
 </li>
 <li>
+To check out your cart, make a post request on localhost:3000/cart/checkout. It just changes the cart from 'isPaid: false' to 'isPaid: true'. Then it makes a fresh new cart for you with no items in it.
 </li>
 <li>
-router.post('/checkout', userController.auth, cartController.checkOut)
-router.get('/history', userController.auth, cartController.showHistory)
-router.get('/:id', userController.auth, cartController.showCart)
-router.put('/:id', userController.auth, cartController.updateItemInCart)
+To get the history of all the paid carts, make a get requestion on localhost:3000/cart/history. It will give you a list of all the past orders that were made.
 </li>
 <li>
+To just look at your cart, make a get request at localhost:3000/cart/. It uses the authorization token to find your user and find the current cart that the user has.
 </li>
+<li>
+<p>
+To change a quantity or delete an item from the cart, make a put request to localhost:3000/cart/. Include the following in the body:
+</p>
+<p>{</p>
+    <p>"item": "*ITEM ID*",</p>
+    <p>"quantity": *NUMBER*</p>
+<p>}</p>
+<p>
+If you put down quantity: 0, the item will be deleted from the cart. Otherwise, it will update the quantity to the desired number.
+</p>
+</ul>
 </ul>
