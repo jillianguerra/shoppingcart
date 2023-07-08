@@ -96,7 +96,12 @@ exports.checkOut = async(req, res) => {
 // router.get('/history', userController.auth, cartController.showHistory)
 exports.showHistory = async(req, res) => {
     try {
-        const carts = await Cart.find({ user: req.user._id, isPaid: true }).populate('items')
+        const carts = await Cart.find({ user: req.user._id, isPaid: true }).populate({
+            path: 'items',
+            populate: {
+                path: 'item'
+            }
+        })
         // find the paid carts and populate the item array
         res.json({ carts: carts })
     } catch (error) {
