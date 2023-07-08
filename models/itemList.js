@@ -11,14 +11,18 @@ const itemListSchema = new Schema({
 })
 
 itemListSchema.pre('save', async function(next) {
+    // before the itemlist is saved, do this function
     const cart = await Cart.findOne({ _id: this.cart })
     const item = await Item.findOne({ _id: this.item })
     if(this.isModified('quantity')) {
+        // when the quantity is changed, do this function
         let product = 0
         product += this.quantity * item.price 
+        // product is quantity times price
         this.total = product
     }
     await cart.save()
+    // trigger the cart pre function
     next()
 })
 

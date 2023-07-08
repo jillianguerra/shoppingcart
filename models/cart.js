@@ -8,12 +8,15 @@ const cartSchema = new Schema({
     isPaid: { type: Boolean, default: false}
 })
 cartSchema.pre('save', async function(next) {
+    // every time the cart is saved, do this function first
     await this.populate('items')
         let sum = 0
         this.items.forEach((item) => {
             sum += item.total
         })
+        // add the item total from each item to the sum
         this.total = sum
+        // set the total to the sum of all items price
     next()
 })
 const Cart = model('Cart', cartSchema)
