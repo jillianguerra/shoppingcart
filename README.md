@@ -11,7 +11,7 @@
 <h2>Installation</h2>
 <ol>
 <li>
-Fork the repository to your github and download the files.
+Fork the repository to your github and git clone. See <a href="https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository">github cloning instructions</a>
 </li>
 <li>
 Open the terminal, change directory into the main folder.
