@@ -22,6 +22,21 @@ exports.auth = async (req, res, next) => {
         res.status(401).send(`We don't know her`)
     }
 }
+exports.checkAdmin = async (req, res, next) => {
+    try {
+        const token = req.header('Authorization').replace('Bearer ', '')
+        const data = jwt.verify(token, process.env.SECRET)
+        const user = await User.findOne({ _id: data._id })
+        if (!user.admin) {
+            throw new Error()
+            // if the user is falsey throw an error because there isn't a valid token
+        }
+        req.user = user
+        next()
+    } catch (error) {
+        res.status(401).send(`Stay in your lane`)
+    }
+}
 exports.createUser = async (req, res, next) => {
     req.body.loggedIn = true
     try {

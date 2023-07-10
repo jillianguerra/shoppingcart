@@ -1,4 +1,3 @@
-require('dotenv').config()
 const { model, Schema } = require('mongoose')
 
 const cartSchema = new Schema({

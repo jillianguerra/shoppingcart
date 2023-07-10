@@ -9,7 +9,9 @@ const userSchema = new mongoose.Schema({
     email: {type: String, required: true, unique: true},
     password: {type: String, required: true},
     loggedIn: Boolean,
-    cart: {type: mongoose.Schema.Types.ObjectId, ref: 'Cart'}
+    cart: {type: mongoose.Schema.Types.ObjectId, ref: 'Cart'},
+    reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
+    admin: {type: Boolean, default: false}
 })
 
 userSchema.pre('save', async function(next) {
@@ -25,5 +27,6 @@ userSchema.methods.generateAuthToken = async function() {
     // creates a token using json web token, the token expires in 24 hours, the secret comes from the .env file
     return token
 }
+
 const User = mongoose.model('User', userSchema)
 module.exports = User

@@ -5,7 +5,6 @@ const app = require('../app')
 const server = app.listen(8080, () => console.log(`8080 Fly you fools`))
 const Item = require('../models/item')
 const User = require('../models/user')
-const Cart = require('../models/cart')
 let mongoServer
 
 beforeAll(async () => {
@@ -21,8 +20,12 @@ afterAll(async () => {
 
 describe('Test the item endpoints', () => {
     test('It should create a new item', async () => {
-        const response = await request(app)
+    const user = new User({ name: 'Admin', email: 'admin1@email.com', password: 'securepassword', admin: true })
+    await user.save()
+    const token = await user.generateAuthToken()
+    const response = await request(app)
         .post('/items/new')
+        .set(`Authorization`, `Bearer ${token}`)
         .send({ name: 'potatoes', description: 'boil em mash em stick em in a stew', category: 'vegetables', price: 5 })
     expect(response.statusCode).toBe(200)
     expect(response.body.name).toEqual('potatoes')
@@ -31,10 +34,14 @@ describe('Test the item endpoints', () => {
     expect(response.body.price).toEqual(5)
     })
     test('It should update an item', async () => {
+        const user = new User({ name: 'Admin', email: 'admin2@email.com', password: 'securepassword', admin: true })
+        await user.save()
+        const token = await user.generateAuthToken()
         const item = new Item({ name: 'tasty fish', description: 'raw and wriggling', category: 'seafood', price: 10 })
         await item.save()
         const response = await request(app)
             .put(`/items/${item._id}`)
+            .set(`Authorization`, `Bearer ${token}`)
             .send({ name: 'ruined fish', description: `Samwise cooked it`, category: 'seafood', price: 20 })
         expect(response.body.name).toEqual('ruined fish')
         expect(response.body.description).toEqual(`Samwise cooked it`)
@@ -50,10 +57,14 @@ describe('Test the item endpoints', () => {
     expect(response.body.price).toEqual(10)
     })
     test('It should delete an item', async () => {
+        const user = new User({ name: 'Admin', email: 'admin3@email.com', password: 'securepassword', admin: true })
+        await user.save()
+        const token = await user.generateAuthToken()
         const item = new Item({ name: 'the one ring', description: `It rules them all`, category: 'jewelery', price: 1000000 })
         await item.save()
         const response = await request(app)
             .delete(`/items/${item._id}`)
+            .set(`Authorization`, `Bearer ${token}`)
         expect(response.statusCode).toBe(200)
         expect(response.body.message).toEqual(`It's gone`)
     })
